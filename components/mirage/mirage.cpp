@@ -35,7 +35,7 @@ const uint8_t MIRAGE_POWER_OFF = 0xC0;
 
 const uint8_t MIRAGE_TEMP_OFFSET = 0x5C;
 
-void MirageClimate::setup() override { climate_ir::ClimateIR::setup(); }
+void MirageClimate::setup() { climate_ir::ClimateIR::setup(); }
 
 void MirageClimate::set_supports_heat(bool supports_heat) {
   this->supports_heat_ = false;
