@@ -6,10 +6,14 @@ namespace esphome
 {
   namespace mirage
   {
-
     static const char *const TAG = "mirage.climate";
 
     const uint8_t MIRAGE_STATE_LENGTH = 14;
+    // NOT USED: 0 (constant, 0x56), 2-3, 6-13
+    // USED:
+    //   - 1: Temperature
+    //   - 4: Mode (COOL / DRY / FAN_ONLY) and Fan Speed (Low / MED / HIGH)
+    //   - 5: Swing, Display and OFF (C0)
 
     const uint8_t MIRAGE_COOL = 0x20;
     const uint8_t MIRAGE_DRY = 0x30;
@@ -21,10 +25,12 @@ namespace esphome
     const uint8_t MIRAGE_FAN_MED = 3;
     const uint8_t MIRAGE_FAN_LOW = 2;
 
-    const uint8_t MIRAGE_SWING_BOTH = 0x03;
-    const uint8_t MIRAGE_SWING_VERTICAL = 0x02;
-    const uint8_t MIRAGE_SWING_HORIZONTAL = 0x01;
-    const uint8_t MIRAGE_SWING_OFF = 0x00;
+    const uint8_t MIRAGE_SWING_BOTH = 3;
+    const uint8_t MIRAGE_SWING_VERTICAL = 2;
+    const uint8_t MIRAGE_SWING_HORIZONTAL = 1;
+    const uint8_t MIRAGE_SWING_OFF = 0;
+
+    const uint8_t MIRAGE_DISPLAY_TOGGLE_MASK = 4;
 
     const uint8_t MIRAGE_POWER_OFF = 0xC0;
 
@@ -142,20 +148,21 @@ namespace esphome
       obj.dump(data_decoded);
 
       // Swing
-      auto swing = data_decoded.data[5];
+      // auto display_toggle = data_decoded.data[5] & MIRAGE_DISPLAY_TOGGLE_MASK;
+      auto swing = data_decoded.data[5] & (~MIRAGE_DISPLAY_TOGGLE_MASK);
       switch (swing)
       {
       case MIRAGE_SWING_BOTH:
-        this->swing_mode = climate::CLIMATE_SWING_BOTH;
+        this->swing_mode = climate::CLIMATE_SWING_BOTH & MIRAGE_DISPLAY_TOGGLE_MASK;
         break;
       case MIRAGE_SWING_VERTICAL:
-        this->swing_mode = climate::CLIMATE_SWING_VERTICAL;
+        this->swing_mode = climate::CLIMATE_SWING_VERTICAL & MIRAGE_DISPLAY_TOGGLE_MASK;
         break;
       case MIRAGE_SWING_HORIZONTAL:
-        this->swing_mode = climate::CLIMATE_SWING_HORIZONTAL;
+        this->swing_mode = climate::CLIMATE_SWING_HORIZONTAL & MIRAGE_DISPLAY_TOGGLE_MASK;
         break;
       case MIRAGE_SWING_OFF:
-        this->swing_mode = climate::CLIMATE_SWING_OFF;        
+        this->swing_mode = climate::CLIMATE_SWING_OFF & MIRAGE_DISPLAY_TOGGLE_MASK;
       default:
         break;
       }
