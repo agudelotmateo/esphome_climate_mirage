@@ -15,15 +15,16 @@ class MirageClimate : public climate_ir::ClimateIR {
  public:
   uint8_t swing_position = 0;
   MirageClimate()
-      : climate_ir::ClimateIR(MIRAGE_TEMP_MIN, MIRAGE_TEMP_MAX, 1.0f, true, true,
-                              {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM, climate::CLIMATE_FAN_HIGH},
-                              {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL, climate::CLIMATE_SWING_HORIZONTAL, climate::CLIMATE_SWING_BOTH}) {}
+      : climate_ir::ClimateIR(
+            MIRAGE_TEMP_MIN, MIRAGE_TEMP_MAX, 1.0f, true, true,
+            {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW,
+             climate::CLIMATE_FAN_MEDIUM, climate::CLIMATE_FAN_HIGH},
+            {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL,
+             climate::CLIMATE_SWING_HORIZONTAL, climate::CLIMATE_SWING_BOTH}) {}
 
-  void set_supports_heat(bool supports_heat) { this->supports_heat_ = false; }
+  void setup() override;
 
-  void setup() override {
-    climate_ir::ClimateIR::setup();
-  }
+  void set_supports_heat(bool supports_heat);
 
  protected:
   /// Transmit via IR the state of this climate controller.
