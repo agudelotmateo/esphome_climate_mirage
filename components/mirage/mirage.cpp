@@ -199,53 +199,52 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
   if (display_toggle == MIRAGE_DISPLAY_TOGGLE_MASK) {
     this->preset = climate::CLIMATE_PRESET_NONE;
   }
-}
 
-// Mode
-if (data_decoded.data[5] == MIRAGE_POWER_OFF) {
-  this->mode = climate::CLIMATE_MODE_OFF;
-} else {
-  auto mode = data_decoded.data[4] & 0x70;
-  ESP_LOGV(TAG, "Mode: %02X", mode);
-  switch (mode) {
-    case MIRAGE_COOL:
-      this->mode = climate::CLIMATE_MODE_COOL;
+  // Mode
+  if (data_decoded.data[5] == MIRAGE_POWER_OFF) {
+    this->mode = climate::CLIMATE_MODE_OFF;
+  } else {
+    auto mode = data_decoded.data[4] & 0x70;
+    ESP_LOGV(TAG, "Mode: %02X", mode);
+    switch (mode) {
+      case MIRAGE_COOL:
+        this->mode = climate::CLIMATE_MODE_COOL;
+        break;
+      case MIRAGE_DRY:
+        this->mode = climate::CLIMATE_MODE_DRY;
+        break;
+      case MIRAGE_FAN:
+        this->mode = climate::CLIMATE_MODE_FAN_ONLY;
+        break;
+    }
+  }
+
+  // Temperature
+  int temp = data_decoded.data[1] - MIRAGE_TEMP_OFFSET;
+  ESP_LOGVV(TAG, "Temperature Climate: %u", temp);
+  this->target_temperature = temp;
+
+  // Fan Speed
+  auto fan = data_decoded.data[4] & 0x03;
+  ESP_LOGVV(TAG, "Fan: %02X", fan);
+  switch (fan) {
+    case MIRAGE_FAN_HIGH:
+      this->fan_mode = climate::CLIMATE_FAN_HIGH;
       break;
-    case MIRAGE_DRY:
-      this->mode = climate::CLIMATE_MODE_DRY;
+    case MIRAGE_FAN_MED:
+      this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
       break;
-    case MIRAGE_FAN:
-      this->mode = climate::CLIMATE_MODE_FAN_ONLY;
+    case MIRAGE_FAN_LOW:
+      this->fan_mode = climate::CLIMATE_FAN_LOW;
+      break;
+    case MIRAGE_FAN_AUTO:
+    default:
+      this->fan_mode = climate::CLIMATE_FAN_AUTO;
       break;
   }
-}
 
-// Temperature
-int temp = data_decoded.data[1] - MIRAGE_TEMP_OFFSET;
-ESP_LOGVV(TAG, "Temperature Climate: %u", temp);
-this->target_temperature = temp;
-
-// Fan Speed
-auto fan = data_decoded.data[4] & 0x03;
-ESP_LOGVV(TAG, "Fan: %02X", fan);
-switch (fan) {
-  case MIRAGE_FAN_HIGH:
-    this->fan_mode = climate::CLIMATE_FAN_HIGH;
-    break;
-  case MIRAGE_FAN_MED:
-    this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
-    break;
-  case MIRAGE_FAN_LOW:
-    this->fan_mode = climate::CLIMATE_FAN_LOW;
-    break;
-  case MIRAGE_FAN_AUTO:
-  default:
-    this->fan_mode = climate::CLIMATE_FAN_AUTO;
-    break;
-}
-
-this->publish_state();
-return true;
+  this->publish_state();
+  return true;
 }
 
 }  // namespace mirage
