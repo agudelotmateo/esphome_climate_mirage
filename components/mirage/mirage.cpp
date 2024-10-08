@@ -69,10 +69,11 @@ void MirageClimate::transmit_state() {
     default:
       break;
   }
-  
+
   // Display Toggle ("Preset")
   if (this->preset.value() == climate::CLIMATE_PRESET_SLEEP) {
     remote_state[5] |= MIRAGE_DISPLAY_TOGGLE_MASK;
+    this->preset = climate::CLIMATE_PRESET_NONE;
   }
 
   // Mode
@@ -141,7 +142,8 @@ climate::ClimateTraits MirageClimate::traits() {
   traits.set_supported_modes(
       {climate::CLIMATE_MODE_OFF, climate::CLIMATE_MODE_COOL,
        climate::CLIMATE_MODE_FAN_ONLY, climate::CLIMATE_MODE_DRY});
-  traits.set_supported_presets({climate::CLIMATE_PRESET_NONE, climate::CLIMATE_PRESET_SLEEP});
+  traits.set_supported_presets(
+      {climate::CLIMATE_PRESET_NONE, climate::CLIMATE_PRESET_SLEEP});
   // traits.set_supported_custom_presets({"Display OFF"});
   return traits;
 }
@@ -185,13 +187,16 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
   }
 
   // Display Toggle ("Preset")
-  switch (this->preset.value()) {
-    case climate::CLIMATE_PRESET_SLEEP:
-      this->preset = climate::CLIMATE_PRESET_NONE;
-      break;
-    case climate::CLIMATE_PRESET_NONE:
-      this->preset = climate::CLIMATE_PRESET_SLEEP;
-      break;
+  uint8_t display_toggle = data_decoded.data[5] & MIRAGE_DISPLAY_TOGGLE_MASK;
+  if (display_toggle == MIRAGE_DISPLAY_TOGGLE_MASK) {
+    switch (this->preset.value()) {
+      case climate::CLIMATE_PRESET_SLEEP:
+        this->preset = climate::CLIMATE_PRESET_NONE;
+        break;
+      case climate::CLIMATE_PRESET_NONE:
+        this->preset = climate::CLIMATE_PRESET_SLEEP;
+        break;
+    }
   }
 
   // Mode
