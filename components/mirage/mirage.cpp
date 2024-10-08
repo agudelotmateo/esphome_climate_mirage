@@ -153,16 +153,16 @@ namespace esphome
       switch (swing)
       {
       case MIRAGE_SWING_BOTH:
-        this->swing_mode = climate::CLIMATE_SWING_BOTH & MIRAGE_DISPLAY_TOGGLE_MASK;
+        this->swing_mode = climate::CLIMATE_SWING_BOTH 
         break;
       case MIRAGE_SWING_VERTICAL:
-        this->swing_mode = climate::CLIMATE_SWING_VERTICAL & MIRAGE_DISPLAY_TOGGLE_MASK;
+        this->swing_mode = climate::CLIMATE_SWING_VERTICAL;
         break;
       case MIRAGE_SWING_HORIZONTAL:
-        this->swing_mode = climate::CLIMATE_SWING_HORIZONTAL & MIRAGE_DISPLAY_TOGGLE_MASK;
+        this->swing_mode = climate::CLIMATE_SWING_HORIZONTAL;
         break;
       case MIRAGE_SWING_OFF:
-        this->swing_mode = climate::CLIMATE_SWING_OFF & MIRAGE_DISPLAY_TOGGLE_MASK;
+        this->swing_mode = climate::CLIMATE_SWING_OFF;
       default:
         break;
       }
