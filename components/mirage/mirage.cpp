@@ -136,7 +136,7 @@ climate::ClimateTraits MirageClimate::traits() {
   traits.set_supported_modes(
       {climate::CLIMATE_MODE_OFF, climate::CLIMATE_MODE_COOL,
        climate::CLIMATE_MODE_FAN_ONLY, climate::CLIMATE_MODE_DRY});
-  traits.set_supported_custom_presets({"Display OFF"})
+  traits.set_supported_custom_presets({"Display OFF"});
   return traits;
 }
 
