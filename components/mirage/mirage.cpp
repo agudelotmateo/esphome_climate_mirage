@@ -142,7 +142,7 @@ namespace esphome
       obj.dump(data_decoded);
 
       // Swing
-      auto swing = data_decoded.data[5]
+      auto swing = data_decoded.data[5];
       switch (swing)
       {
       case MIRAGE_SWING_BOTH:
