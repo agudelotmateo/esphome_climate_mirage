@@ -10,7 +10,6 @@ static const char *const TAG = "mirage.climate";
 
 const uint8_t MIRAGE_STATE_LENGTH = 14;
 
-const uint8_t MIRAGE_HEAT = 0x10;
 const uint8_t MIRAGE_COOL = 0x20;  
 const uint8_t MIRAGE_DRY = 0x30;
 const uint8_t MIRAGE_AUTO = 0x40;
@@ -42,12 +41,6 @@ void MirageClimate::transmit_state() {
   }
 
   switch (this->mode) {
-    case climate::CLIMATE_MODE_HEAT_COOL:
-      remote_state[4] |= MIRAGE_AUTO;
-      break;
-    case climate::CLIMATE_MODE_HEAT:
-      remote_state[4] |= MIRAGE_HEAT;
-      break;
     case climate::CLIMATE_MODE_COOL:
       remote_state[4] |= MIRAGE_COOL;
       break;
@@ -142,9 +135,6 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
     auto mode = data_decoded.data[4] & 0x70;
     ESP_LOGV(TAG, "Mode: %02X", mode);
     switch (mode) {
-      case MIRAGE_HEAT:
-        this->mode = climate::CLIMATE_MODE_HEAT;
-        break;
       case MIRAGE_COOL:
         this->mode = climate::CLIMATE_MODE_COOL;
         break;
@@ -153,9 +143,6 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
         break;
       case MIRAGE_FAN:
         this->mode = climate::CLIMATE_MODE_FAN_ONLY;
-        break;
-      case MIRAGE_AUTO:
-        this->mode = climate::CLIMATE_MODE_HEAT_COOL;
         break;
     }
   }

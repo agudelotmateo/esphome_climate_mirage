@@ -20,6 +20,8 @@ class MirageClimate : public climate_ir::ClimateIR {
                                climate::CLIMATE_FAN_HIGH},
                               {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL, climate::CLIMATE_SWING_HORIZONTAL}) {}
 
+  void set_supports_heat(bool supports_heat) { this->supports_heat_ = false; }
+
   void setup() override {
     climate_ir::ClimateIR::setup();
   }
