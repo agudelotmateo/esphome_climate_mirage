@@ -40,6 +40,23 @@ void MirageClimate::transmit_state() {
     remote_state[5] = 0x1A;
   }
 
+  // Swing
+  switch (this->swing_mode) {
+    case climate::CLIMATE_SWING_BOTH:
+      remote_state[5] = 0x03;
+      break;
+    case climate::CLIMATE_SWING_VERTICAL:
+      remote_state[5] = 0x02;
+      break;
+    case climate::CLIMATE_SWING_HORIZONTAL:
+      remote_state[5] = 0x01;
+      break;
+    case climate::CLIMATE_SWING_OFF:
+      remote_state[5] = 0x00;
+    default:
+      break;
+  }
+
   // Mode
   switch (this->mode) {
     case climate::CLIMATE_MODE_COOL:
@@ -74,23 +91,6 @@ void MirageClimate::transmit_state() {
       break;
   default:
     break;
-  }
-
-  // Swing
-  switch (this->swing_mode) {
-    case climate::CLIMATE_SWING_BOTH:
-      remote_state[5] = 0x03;
-      break;
-    case climate::CLIMATE_SWING_VERTICAL:
-      remote_state[5] = 0x02;
-      break;
-    case climate::CLIMATE_SWING_HORIZONTAL:
-      remote_state[5] = 0x01;
-      break;
-    case climate::CLIMATE_SWING_OFF:
-      remote_state[5] = 0x00;
-    default:
-      break;
   }
 
   ESP_LOGI(TAG,
