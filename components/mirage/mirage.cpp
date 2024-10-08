@@ -144,7 +144,6 @@ climate::ClimateTraits MirageClimate::traits() {
        climate::CLIMATE_MODE_FAN_ONLY, climate::CLIMATE_MODE_DRY});
   traits.set_supported_presets(
       {climate::CLIMATE_PRESET_NONE, climate::CLIMATE_PRESET_SLEEP});
-  // traits.set_supported_custom_presets({"Display OFF"});
   return traits;
 }
 
@@ -196,17 +195,7 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
   }
 
   // Display Toggle ("Preset")
-  uint8_t display_toggle = data_decoded.data[5] & MIRAGE_DISPLAY_TOGGLE_MASK;
-  if (display_toggle == MIRAGE_DISPLAY_TOGGLE_MASK) {
-    switch (this->preset.value()) {
-      case climate::CLIMATE_PRESET_SLEEP:
-        this->preset = climate::CLIMATE_PRESET_NONE;
-        break;
-      case climate::CLIMATE_PRESET_NONE:
-        this->preset = climate::CLIMATE_PRESET_SLEEP;
-        break;
-    }
-  }
+  // no need to do anything in this case
 
   // Mode
   if (data_decoded.data[5] == MIRAGE_POWER_OFF) {
