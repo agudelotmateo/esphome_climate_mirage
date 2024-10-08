@@ -168,6 +168,16 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
       *optional_data_decoded;  // Dereference the optional to get the MirageData
   obj.dump(data_decoded);
 
+  ESP_LOGI(TAG,
+           "Received: %02X %02X %02X %02X   %02X %02X %02X %02X   %02X %02X "
+           "%02X %02X   %02X %02X",
+           data_decoded.data[0], data_decoded.data[1], data_decoded.data[2],
+           data_decoded.data[3], data_decoded.data[4], data_decoded.data[5],
+           data_decoded.data[6], data_decoded.data[7], data_decoded.data[8],
+           data_decoded.data[9], data_decoded.data[10],
+           data_decoded.data.datamote_state[11],
+           remotedata_decoded.data_state[12], data_decoded.data[13]);
+
   // Swing
   uint8_t swing = data_decoded.data[5] & (~MIRAGE_DISPLAY_TOGGLE_MASK);
   switch (swing) {
