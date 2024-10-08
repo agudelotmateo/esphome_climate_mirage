@@ -133,8 +133,6 @@ void MirageClimate::transmit_state() {
 
 climate::ClimateTraits MirageClimate::traits() {
   climate::ClimateTraits traits = climate_ir::ClimateIR::traits();
-  traits.set_supports_current_temperature(true);
-  traits.set_supports_current_humidity(true);
   traits.set_supported_modes(
       {climate::CLIMATE_MODE_OFF, climate::CLIMATE_MODE_COOL,
        climate::CLIMATE_MODE_FAN_ONLY, climate::CLIMATE_MODE_DRY});
