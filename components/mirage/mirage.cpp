@@ -153,7 +153,7 @@ namespace esphome
       switch (swing)
       {
       case MIRAGE_SWING_BOTH:
-        this->swing_mode = climate::CLIMATE_SWING_BOTH 
+        this->swing_mode = climate::CLIMATE_SWING_BOTH;
         break;
       case MIRAGE_SWING_VERTICAL:
         this->swing_mode = climate::CLIMATE_SWING_VERTICAL;
