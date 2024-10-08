@@ -37,7 +37,9 @@ const uint8_t MIRAGE_TEMP_OFFSET = 0x5C;
 
 void MirageClimate::setup() override { climate_ir::ClimateIR::setup(); }
 
-void MirageClimate::set_supports_heat(bool supports_heat) { this->supports_heat_ = false; }
+void MirageClimate::set_supports_heat(bool supports_heat) {
+  this->supports_heat_ = false;
+}
 
 void MirageClimate::transmit_state() {
   this->last_transmit_time_ =
@@ -127,6 +129,16 @@ void MirageClimate::transmit_state() {
   obj.encode(data, in);
 
   transmit.perform();
+}
+
+climate::ClimateTraits MirageClimate::traits() {
+  climate::ClimateTraits traits = climate_ir::ClimateIR::traits();
+  traits.set_supports_current_temperature(true);
+  traits.set_supports_current_humidity(true);
+  traits.set_supported_modes(
+      {climate::CLIMATE_MODE_OFF, climate::CLIMATE_MODE_COOL,
+       climate::CLIMATE_MODE_FAN_ONLY, climate::CLIMATE_MODE_DRY});
+  return traits;
 }
 
 bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {

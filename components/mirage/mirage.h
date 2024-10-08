@@ -27,11 +27,12 @@ class MirageClimate : public climate_ir::ClimateIR {
   void set_supports_heat(bool supports_heat);
 
  protected:
-  /// Transmit via IR the state of this climate controller.
+  // Transmit via IR the state of this climate controller.
   void transmit_state() override;
-  /// Handle received IR Buffer
+  climate::ClimateTraits traits() override;
+  // Handle received IR Buffer
   bool on_receive(remote_base::RemoteReceiveData data) override;
-  /// Set the time of the last transmission.
+  // Set the time of the last transmission.
   int32_t last_transmit_time_{};
 };
 
