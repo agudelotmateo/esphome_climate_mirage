@@ -185,13 +185,12 @@ bool MirageClimate::on_receive(remote_base::RemoteReceiveData data) {
   }
 
   // Display Toggle ("Preset")
-  auto display_toggle =  data_decoded.data[5] & MIRAGE_DISPLAY_TOGGLE_MASK;
-  switch (display_toggle) {
-    case MIRAGE_DISPLAY_TOGGLE_MASK:
-      this->preset = climate::CLIMATE_PRESET_SLEEP;
-      break;
-    default:
+  switch (this->preset) {
+    case climate::CLIMATE_PRESET_SLEEP:
       this->preset = climate::CLIMATE_PRESET_NONE;
+      break;
+    case climate::CLIMATE_PRESET_NONE:
+      this->preset = climate::CLIMATE_PRESET_SLEEP;
       break;
   }
 
