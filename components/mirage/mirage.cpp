@@ -149,7 +149,7 @@ namespace esphome
 
       // Swing
       // auto display_toggle = data_decoded.data[5] & MIRAGE_DISPLAY_TOGGLE_MASK;
-      auto swing = data_decoded.data[5] & (~MIRAGE_DISPLAY_TOGGLE_MASK);
+      uint8_t swing = data_decoded.data[5] & (~MIRAGE_DISPLAY_TOGGLE_MASK);
       switch (swing)
       {
       case MIRAGE_SWING_BOTH:
