@@ -40,6 +40,7 @@ void MirageClimate::transmit_state() {
     remote_state[5] = 0x1A;
   }
 
+  // Mode
   switch (this->mode) {
     case climate::CLIMATE_MODE_COOL:
       remote_state[4] |= MIRAGE_COOL;
@@ -57,7 +58,7 @@ void MirageClimate::transmit_state() {
   }
 
   // Temperature
-  auto temp = (uint8_t) roundf(clamp(this->target_temperature, float(16), float(32)));
+  auto temp = (uint8_t) roundf(clamp(this->target_temperature, MIRAGE_TEMP_MIN, MIRAGE_TEMP_MAX));
   remote_state[1] += temp;
 
   // Fan speed
@@ -76,19 +77,20 @@ void MirageClimate::transmit_state() {
   }
 
   // Swing
-  if (this->swing_mode == climate::CLIMATE_SWING_VERTICAL || this->swing_mode == climate::CLIMATE_SWING_BOTH) {
-    remote_state[5] |= 0x1A;
-  }
-  if (this->swing_mode == climate::CLIMATE_SWING_HORIZONTAL || this->swing_mode == climate::CLIMATE_SWING_BOTH) {
-    remote_state[5] |= 1;
-  }
-
-  if (this->swing_mode == climate::CLIMATE_SWING_OFF) {
-    if (this->swing_position > 5)
-      this->swing_position = 0;
-    this->swing_position += 1;
-    remote_state[5] |= 2;
-    remote_state[5] |= this->swing_position << 2;
+  switch (this->swing_mode) {
+    case climate::CLIMATE_SWING_BOTH:
+      remote_state[5] = 0x03;
+      break;
+    case climate::CLIMATE_SWING_VERTICAL:
+      remote_state[5] = 0x02;
+      break;
+    case climate::CLIMATE_SWING_HORIZONTAL:
+      remote_state[5] = 0x01;
+      break;
+    case climate::CLIMATE_SWING_OFF:
+      remote_state[5] = 0x00;
+    default:
+      break;
   }
 
   ESP_LOGI(TAG,
