@@ -1,5 +1,4 @@
 ## ESPHome AC Climate Mirage component
 
-ESPHome AC Climate Mirage component. It has been made for a PRIME AC unit that uses Mirage IR protocol, but test against your own units. 
+Adapted to work for generic Simply Turn On (AKA Finlandek, sold by Exito Colombia) whitelabeled ACs that use the Mirage IR protocol
 
-It is based on Whirlpool climate component, needs proper formatting. Requests are welcome.
